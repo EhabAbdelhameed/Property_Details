@@ -1,117 +1,106 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import Header from './src/components/Header';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistor} from './src/store/store';
+import Counter from './src/components/Counter';
+import store from './src/store/store';
+import SwitchSelectionButton from './src/components/SwitchSelectionButton';
+import AccessPhoto from './src/photo/AccessPhoto';
+import InputComponent from './src/components/Inputs';
+import ButtonsPage from './src/components/Buttons';
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <View style={styles.container}>
+          <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
+          <Header title={'Property Details'} />
+          <ScrollView contentInsetAdjustmentBehavior="automatic">
+            <View style={styles.contantContainer}>
+              <View style={styles.TitleStyle}>
+                <Text style={styles.TitleText}>Step 1 - Unit Details</Text>
+                <Text style={styles.SubTitle}>
+                  Please enter the unit information below
+                </Text>
+              </View>
+              <InputComponent InputName={'Unit Size'} />
+              <View style={styles.containerCounter}>
+                <View style={styles.counterStyle}>
+                  <Counter counterName="Bedrooms" />
+                  <Counter counterName="Bathrooms" />
+                </View>
+                <View style={styles.counterStyle}>
+                  <Counter counterName="GuestRooms" />
+                  <Counter counterName="Lounges" />
+                </View>
+              </View>
+              <View style={styles.containerCounter}>
+                <View style={styles.counterStyle}>
+                  <SwitchSelectionButton
+                    buttonName="Furnished"
+                    options={['Yes', 'No']}
+                  />
+                  <SwitchSelectionButton
+                    buttonName="Kitchen"
+                    options={['Closed', 'Open']}
+                  />
+                </View>
+                <SwitchSelectionButton
+                  buttonName="Parking"
+                  options={['Split', 'Central']}
+                />
+              </View>
+              <InputComponent InputName={'Electricity Meter No'} />
+              <InputComponent InputName={'Water Meter No'} />
+              <View style={styles.containerCounter}>
+                <SwitchSelectionButton
+                  buttonName="SelectAcType"
+                  options={['Split', 'Central', 'Window', 'Not Installed']}
+                />
+              </View>
+              <AccessPhoto />
+              <ButtonsPage />
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </PersistGate>
+    </Provider>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  contantContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  containerCounter: {
+    width: '90%',
   },
-  highlight: {
-    fontWeight: '700',
+  counterStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  TitleStyle: {
+    width: '90%',
+    marginTop: 15,
+    marginBottom: 10,
+  },
+  TitleText: {
+    fontSize: 20,
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  SubTitle: {
+    fontSize: 14,
+    color: '#81BEA9',
   },
 });
 
